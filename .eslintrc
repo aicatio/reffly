@@ -1,0 +1,12 @@
+{ 
+  "extends": "react-app",
+  "plugins": [ 
+    "react-hooks"
+  ],
+  "rules": {
+    "eqeqeq": "off",
+    "react/jsx-pascal-case": "off",
+    "react-hooks/rules-of-hooks": "error", 
+    "react-hooks/exhaustive-deps": "warn"
+  }
+}
