@@ -6,7 +6,6 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 import AddLinkIcon from '@mui/icons-material/AddLink';
-import axios from 'axios';
 import { Link } from '@mui/material';
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
@@ -14,8 +13,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { setCookieAccepted } from '../redux/actions/cookie';
 import { ShortenedState } from '../redux/reducers/shortened';
-import { setShortenedUrl } from '../redux/actions/shortened';
-import ShortenerResult from './helpers/ShortenerResult'
+import { createShortenedUrl } from '../redux/actions/shortened';
+import ShortenerResult from './helpers/ShortenerResult';
 
 const validationSchema = object().shape({
   origUrl: string()
@@ -38,28 +37,15 @@ export default function Jumptron() {
     validationSchema: validationSchema,
     onSubmit: (values, actions) => {
       dispatch(setCookieAccepted());
-
-      axios
-        .post('http://localhost:3101/api/add', values)
-        .then(response => {
-          if (response.status == 200) {
-            if (response.data.status == 'success') {
-              dispatch(
-                setShortenedUrl([values.origUrl, response.data.shortUrl])
-              );
-            }
-            if (response.data.status == 'failed') {
-              actions.setErrors({ origUrl: response.data.message });
-            }
-          }
-          console.log(actions, response);
-        })
-        .catch(error => {
-          console.log(error);
-        })
-        .finally(() => {
+      dispatch(
+        createShortenedUrl(values.origUrl, (status, message) => {
           actions.setSubmitting(false);
-        });
+          if (status == false) {
+            actions.setErrors({ origUrl: message });
+            return;
+          }
+        })
+      );
     },
   });
 
@@ -109,15 +95,11 @@ export default function Jumptron() {
             </form>
             <Typography mt={2} variant="body1" color="text.secondary">
               By using our service, you accept our{' '}
-              <Link href="/terms-and-conditions">
-                Terms
-              </Link>{' '}
-              &amp; <Link href="/privacy-policy">Privacy</Link>
+              <Link href="/terms-and-conditions">Terms</Link> &amp;{' '}
+              <Link href="/privacy-policy">Privacy</Link>
             </Typography>
           </CardContent>
-          {shortUrl && origUrl && (
-            <ShortenerResult shortUrl={shortUrl} />
-          )}
+          {shortUrl && origUrl && <ShortenerResult shortUrl={shortUrl} />}
         </Card>
       </Grid>
     </Grid>

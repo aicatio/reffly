@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 
-import { SHORTENED_ADD_SHORT_URL } from '../actions/_types';
+import { SHORTENED_STORE_SHORT_URL } from '../actions/_types';
 
 export interface ShortenedState {
   shortUrl: string | undefined;
@@ -21,7 +21,9 @@ export const shortenedReducer = (
   action: ShortenedPayload
 ) => {
   switch (action.type) {
-    case SHORTENED_ADD_SHORT_URL: {
+    case SHORTENED_STORE_SHORT_URL: {
+      Cookies.set('Reffly_OrigUrl', action.payload[0]);
+      Cookies.set('Reffly_ShortUrl', action.payload[1]);
       return {
         origUrl: action.payload[0],
         shortUrl: action.payload[1],

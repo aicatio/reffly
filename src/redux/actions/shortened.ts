@@ -1,13 +1,29 @@
-import Cookies from 'js-cookie';
+import axios from 'axios';
+import { SHORTENED_STORE_SHORT_URL } from '../actions/_types';
+require('dotenv').config({ path: './.env' });
 
-import { SHORTENED_ADD_SHORT_URL } from '../actions/_types';
+type ReaquestCallback = (status: boolean, message: string) => void | boolean;
 
-export const setShortenedUrl = (response: string[]) => (dispatch: any) => {
-  Cookies.set('Reffly_OrigUrl', response[0]);
-  Cookies.set('Reffly_ShortUrl', response[1]);
-
-  dispatch({
-    type: SHORTENED_ADD_SHORT_URL,
-    payload: response,
-  });
+export const createShortenedUrl = (
+  origUrl: string,
+  callbac: ReaquestCallback
+) => (dispatch: any) => {
+  axios
+    .post(process.env.URL_BASE + '/api/add/', { origUrl })
+    .then(response => {
+      if (response.status == 200) {
+        callbac(response.data.status == 'success', response.data.message);
+        if (response.data.status == 'success') {
+          dispatch({
+            type: SHORTENED_STORE_SHORT_URL,
+            payload: [origUrl, response.data.shortUrl],
+          });
+        }
+        return;
+      }
+      callbac(false, 'Network error');
+    })
+    .catch(() => {
+      callbac(false, 'Network error');
+    });
 };

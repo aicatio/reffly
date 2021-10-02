@@ -2,6 +2,7 @@
   "name": "@aicat/reffly",
   "author": "Ali Hasan",
   "version": "1.0.0",
+  "private": false,
   "license": "BSD-3-Clause",
   "main": "build/index.js",
   "module": "build/web/reffly-open.esm.js",
@@ -9,6 +10,9 @@
   "files": [ "build/*"],
   "engines": {
     "node": ">=10"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "start": "run-p start:react start:server",
