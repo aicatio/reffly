@@ -19,7 +19,7 @@ router.post('/url/create', async (req, res) => {
   try {
     let oldUrl = await ShortUrl.findOne({ origUrl });
     if (oldUrl) {
-      const shortUrl = `${process.env.URL_WEB}/${oldUrl._id}`;
+      const shortUrl = `${process.env.URL_API}/${oldUrl._id}`;
       res.status(200).json({ status: 'success', shortUrl });
       return;
     }
@@ -27,7 +27,7 @@ router.post('/url/create', async (req, res) => {
     let urlSchema = new ShortUrl({ origUrl });
     let newUrl = await urlSchema.save();
     if (newUrl) {
-      const shortUrl = `${process.env.URL_WEB}/${newUrl._id}`;
+      const shortUrl = `${process.env.URL_API}/${newUrl._id}`;
       res.status(200).json({ status: 'success', shortUrl });
       return;
     }
