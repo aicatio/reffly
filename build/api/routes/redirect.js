@@ -10,7 +10,7 @@ router.get('/:urlId', async (req, res) => {
     if (searchUrl) {
       res.redirect(searchUrl.origUrl);
     } else {
-      res.redirect(process.env.URL_404);
+      res.redirect(process.env.URL_WEB + '/404');
     }
   } catch (err) {
     console.log(err);
@@ -19,7 +19,7 @@ router.get('/:urlId', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-  res.redirect(process.env.URL_BASE);
+  res.redirect(process.env.URL_WEB);
 });
 
 module.exports = router;

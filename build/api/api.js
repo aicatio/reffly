@@ -6,7 +6,7 @@ var compression = require('compression');
 
 require('dotenv').config({ path: './.env' });
 
-const base = process.env.URL_BASE;
+const base = process.env.URL_WEB;
 const app = express();
 
 app.use(compression());
