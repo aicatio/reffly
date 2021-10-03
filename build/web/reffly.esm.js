@@ -27,10 +27,9 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
-import axios from 'axios';
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
-import Cookies from 'js-cookie';
+import axios from 'axios';
 import CardActions from '@mui/material/CardActions';
 import Button from '@mui/material/Button';
 import Input from '@mui/material/Input';
@@ -41,6 +40,7 @@ import { Link as Link$2 } from 'react-router-dom';
 import { combineReducers, createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
+import Cookies from 'js-cookie';
 
 var StyledBadge = /*#__PURE__*/styled(Badge)(function (_ref) {
   var theme = _ref.theme;
@@ -390,7 +390,7 @@ var Dashboard = function Dashboard() {
 // Actions for "cookie" reducers
 var COOKIE_ADD_COOKIE = 'COOKIE_ADD_COOKIE'; // Actions for "shortened" reducers
 
-var SHORTENED_ADD_SHORT_URL = 'SHORTENED_ADD_SHORT_URL';
+var SHORTENED_STORE_SHORT_URL = 'SHORTENED_STORE_SHORT_URL';
 
 var setCookieAccepted = function setCookieAccepted() {
   return function (dispatch) {
@@ -401,13 +401,25 @@ var setCookieAccepted = function setCookieAccepted() {
   };
 };
 
-var setShortenedUrl = function setShortenedUrl(response) {
+var createShortenedUrl = function createShortenedUrl(origUrl, callbac) {
   return function (dispatch) {
-    Cookies.set('Reffly_OrigUrl', response[0]);
-    Cookies.set('Reffly_ShortUrl', response[1]);
-    dispatch({
-      type: SHORTENED_ADD_SHORT_URL,
-      payload: response
+    axios.get(process.env.URL_API + '/add/?origUrl=' + encodeURI(origUrl)).then(function (response) {
+      if (response.status == 200) {
+        callbac(response.data.status == 'success', response.data.message);
+
+        if (response.data.status == 'success') {
+          dispatch({
+            type: SHORTENED_STORE_SHORT_URL,
+            payload: [origUrl, response.data.shortUrl]
+          });
+        }
+
+        return;
+      }
+
+      callbac(false, 'Network error');
+    })["catch"](function () {
+      callbac(false, 'Network error');
     });
   };
 };
@@ -495,25 +507,16 @@ function Jumptron() {
     validationSchema: validationSchema,
     onSubmit: function onSubmit(values, actions) {
       dispatch(setCookieAccepted());
-      axios.post('http://localhost:3101/api/add', values).then(function (response) {
-        if (response.status == 200) {
-          if (response.data.status == 'success') {
-            dispatch(setShortenedUrl([values.origUrl, response.data.shortUrl]));
-          }
-
-          if (response.data.status == 'failed') {
-            actions.setErrors({
-              origUrl: response.data.message
-            });
-          }
-        }
-
-        console.log(actions, response);
-      })["catch"](function (error) {
-        console.log(error);
-      })["finally"](function () {
+      dispatch(createShortenedUrl(values.origUrl, function (status, message) {
         actions.setSubmitting(false);
-      });
+
+        if (status == false) {
+          actions.setErrors({
+            origUrl: message
+          });
+          return;
+        }
+      }));
     }
   });
   var submitBtnProps = {
@@ -579,7 +582,7 @@ function Jumptron() {
     color: "text.secondary"
   }, "By using our service, you accept our", ' ', React__default.createElement(Link, {
     href: "/terms-and-conditions"
-  }, "Terms"), ' ', "& ", React__default.createElement(Link, {
+  }, "Terms"), " &", ' ', React__default.createElement(Link, {
     href: "/privacy-policy"
   }, "Privacy"))), shortUrl && origUrl && React__default.createElement(ShortenerResult, {
     shortUrl: shortUrl
@@ -1085,8 +1088,10 @@ var shortenedReducer = function shortenedReducer(state, action) {
   }
 
   switch (action.type) {
-    case SHORTENED_ADD_SHORT_URL:
+    case SHORTENED_STORE_SHORT_URL:
       {
+        Cookies.set('Reffly_OrigUrl', action.payload[0]);
+        Cookies.set('Reffly_ShortUrl', action.payload[1]);
         return {
           origUrl: action.payload[0],
           shortUrl: action.payload[1]
@@ -1098,12 +1103,14 @@ var shortenedReducer = function shortenedReducer(state, action) {
   }
 };
 
-var allReducers = /*#__PURE__*/combineReducers({
+var allReducers = {
   shortened: shortenedReducer,
   cookie: cookieReducer
-});
+};
+var rootReducer = /*#__PURE__*/combineReducers(allReducers);
 
-var store = /*#__PURE__*/createStore(allReducers, /*#__PURE__*/composeWithDevTools( /*#__PURE__*/applyMiddleware(thunk)));
+var composer = /*#__PURE__*/composeWithDevTools( /*#__PURE__*/applyMiddleware(thunk));
+var store = /*#__PURE__*/createStore(rootReducer, composer);
 
-export { Dashboard, Error404, Homepage, Layout, PrivacyPolicy, TcsofService, TempPage, store };
+export { Dashboard, Error404, Homepage, Layout, PrivacyPolicy, TcsofService, TempPage, allReducers as refflyReducers, store };
 //# sourceMappingURL=reffly.esm.js.map

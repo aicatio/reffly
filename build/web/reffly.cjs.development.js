@@ -34,10 +34,9 @@ var Card = _interopDefault(require('@mui/material/Card'));
 var CardContent = _interopDefault(require('@mui/material/CardContent'));
 var TextField = _interopDefault(require('@mui/material/TextField'));
 var LoadingButton = _interopDefault(require('@mui/lab/LoadingButton'));
-var axios = _interopDefault(require('axios'));
 var formik = require('formik');
 var yup = require('yup');
-var Cookies = _interopDefault(require('js-cookie'));
+var axios = _interopDefault(require('axios'));
 var CardActions = _interopDefault(require('@mui/material/CardActions'));
 var Button = _interopDefault(require('@mui/material/Button'));
 var Input = _interopDefault(require('@mui/material/Input'));
@@ -48,6 +47,7 @@ var reactRouterDom = require('react-router-dom');
 var redux = require('redux');
 var reduxDevtoolsExtension = require('redux-devtools-extension');
 var thunk = _interopDefault(require('redux-thunk'));
+var Cookies = _interopDefault(require('js-cookie'));
 
 var StyledBadge = /*#__PURE__*/styles.styled(Badge)(function (_ref) {
   var theme = _ref.theme;
@@ -397,7 +397,7 @@ var Dashboard = function Dashboard() {
 // Actions for "cookie" reducers
 var COOKIE_ADD_COOKIE = 'COOKIE_ADD_COOKIE'; // Actions for "shortened" reducers
 
-var SHORTENED_ADD_SHORT_URL = 'SHORTENED_ADD_SHORT_URL';
+var SHORTENED_STORE_SHORT_URL = 'SHORTENED_STORE_SHORT_URL';
 
 var setCookieAccepted = function setCookieAccepted() {
   return function (dispatch) {
@@ -408,13 +408,25 @@ var setCookieAccepted = function setCookieAccepted() {
   };
 };
 
-var setShortenedUrl = function setShortenedUrl(response) {
+var createShortenedUrl = function createShortenedUrl(origUrl, callbac) {
   return function (dispatch) {
-    Cookies.set('Reffly_OrigUrl', response[0]);
-    Cookies.set('Reffly_ShortUrl', response[1]);
-    dispatch({
-      type: SHORTENED_ADD_SHORT_URL,
-      payload: response
+    axios.get(process.env.URL_API + '/add/?origUrl=' + encodeURI(origUrl)).then(function (response) {
+      if (response.status == 200) {
+        callbac(response.data.status == 'success', response.data.message);
+
+        if (response.data.status == 'success') {
+          dispatch({
+            type: SHORTENED_STORE_SHORT_URL,
+            payload: [origUrl, response.data.shortUrl]
+          });
+        }
+
+        return;
+      }
+
+      callbac(false, 'Network error');
+    })["catch"](function () {
+      callbac(false, 'Network error');
     });
   };
 };
@@ -502,25 +514,16 @@ function Jumptron() {
     validationSchema: validationSchema,
     onSubmit: function onSubmit(values, actions) {
       dispatch(setCookieAccepted());
-      axios.post('http://localhost:3101/api/add', values).then(function (response) {
-        if (response.status == 200) {
-          if (response.data.status == 'success') {
-            dispatch(setShortenedUrl([values.origUrl, response.data.shortUrl]));
-          }
-
-          if (response.data.status == 'failed') {
-            actions.setErrors({
-              origUrl: response.data.message
-            });
-          }
-        }
-
-        console.log(actions, response);
-      })["catch"](function (error) {
-        console.log(error);
-      })["finally"](function () {
+      dispatch(createShortenedUrl(values.origUrl, function (status, message) {
         actions.setSubmitting(false);
-      });
+
+        if (status == false) {
+          actions.setErrors({
+            origUrl: message
+          });
+          return;
+        }
+      }));
     }
   });
   var submitBtnProps = {
@@ -586,7 +589,7 @@ function Jumptron() {
     color: "text.secondary"
   }, "By using our service, you accept our", ' ', React__default.createElement(material.Link, {
     href: "/terms-and-conditions"
-  }, "Terms"), ' ', "& ", React__default.createElement(material.Link, {
+  }, "Terms"), " &", ' ', React__default.createElement(material.Link, {
     href: "/privacy-policy"
   }, "Privacy"))), shortUrl && origUrl && React__default.createElement(ShortenerResult, {
     shortUrl: shortUrl
@@ -1092,8 +1095,10 @@ var shortenedReducer = function shortenedReducer(state, action) {
   }
 
   switch (action.type) {
-    case SHORTENED_ADD_SHORT_URL:
+    case SHORTENED_STORE_SHORT_URL:
       {
+        Cookies.set('Reffly_OrigUrl', action.payload[0]);
+        Cookies.set('Reffly_ShortUrl', action.payload[1]);
         return {
           origUrl: action.payload[0],
           shortUrl: action.payload[1]
@@ -1105,12 +1110,14 @@ var shortenedReducer = function shortenedReducer(state, action) {
   }
 };
 
-var allReducers = /*#__PURE__*/redux.combineReducers({
+var allReducers = {
   shortened: shortenedReducer,
   cookie: cookieReducer
-});
+};
+var rootReducer = /*#__PURE__*/redux.combineReducers(allReducers);
 
-var store = /*#__PURE__*/redux.createStore(allReducers, /*#__PURE__*/reduxDevtoolsExtension.composeWithDevTools( /*#__PURE__*/redux.applyMiddleware(thunk)));
+var composer = /*#__PURE__*/reduxDevtoolsExtension.composeWithDevTools( /*#__PURE__*/redux.applyMiddleware(thunk));
+var store = /*#__PURE__*/redux.createStore(rootReducer, composer);
 
 exports.Dashboard = Dashboard;
 exports.Error404 = Error404;
@@ -1119,5 +1126,6 @@ exports.Layout = Layout;
 exports.PrivacyPolicy = PrivacyPolicy;
 exports.TcsofService = TcsofService;
 exports.TempPage = TempPage;
+exports.refflyReducers = allReducers;
 exports.store = store;
 //# sourceMappingURL=reffly.cjs.development.js.map
