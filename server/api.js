@@ -1,11 +1,18 @@
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./database');
+var helmet = require('helmet');
+var compression = require('compression');
+
 require('dotenv').config({ path: './.env' });
 
 const base = process.env.URL_BASE;
 const app = express();
+
+app.use(compression());
+app.use(helmet());
 app.use(cors());
+
 connectDB();
 
 // Body Parser
