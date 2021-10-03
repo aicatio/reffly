@@ -410,7 +410,9 @@ var setCookieAccepted = function setCookieAccepted() {
 
 var createShortenedUrl = function createShortenedUrl(origUrl, callbac) {
   return function (dispatch) {
-    axios.get(process.env.URL_API + '/api/url/create.do?origUrl=' + encodeURI(origUrl)).then(function (response) {
+    axios.post(process.env.URL_API + '/api/url/create', {
+      origUrl: origUrl
+    }).then(function (response) {
       if (response.status == 200) {
         callbac(response.data.status == 'success', response.data.message);
 

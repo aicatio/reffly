@@ -4,8 +4,8 @@ const checkUrlExists = require('../utils/url-exists');
 
 const router = express.Router();
 
-router.get('/url/create.do', async (req, res) => {
-  const { origUrl } = req.query;
+router.post('/url/create', async (req, res) => {
+  const { origUrl } = req.body;
   const status = await checkUrlExists(origUrl);
 
   if (status == false) {
