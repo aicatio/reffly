@@ -3,7 +3,6 @@ const ShortUrl = require('../models/ShortUrl');
 const checkUrlExists = require('../utils/url-exists');
 
 const router = express.Router();
-const base = process.env.URL_BASE;
 
 router.get('/url/create.do', async (req, res) => {
   const { origUrl } = req.query;
@@ -20,7 +19,7 @@ router.get('/url/create.do', async (req, res) => {
   try {
     let oldUrl = await ShortUrl.findOne({ origUrl });
     if (oldUrl) {
-      const shortUrl = `${base}/${oldUrl._id}`;
+      const shortUrl = `${process.env.URL_WEB}/${oldUrl._id}`;
       res.status(200).json({ status: 'success', shortUrl });
       return;
     }
@@ -28,7 +27,7 @@ router.get('/url/create.do', async (req, res) => {
     let urlSchema = new ShortUrl({ origUrl });
     let newUrl = await urlSchema.save();
     if (newUrl) {
-      const shortUrl = `${base}/${newUrl._id}`;
+      const shortUrl = `${process.env.URL_WEB}/${newUrl._id}`;
       res.status(200).json({ status: 'success', shortUrl });
       return;
     }
