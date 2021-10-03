@@ -1,7 +1,7 @@
 {
   "name": "@aicat/reffly",
   "author": "Ali Hasan",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "private": false,
   "license": "BSD-3-Clause",
   "main": "build/index.js",
