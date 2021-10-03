@@ -18,4 +18,8 @@ router.get('/:urlId', async (req, res) => {
   }
 });
 
+router.get('/', async (req, res) => {
+  res.redirect(process.env.URL_BASE);
+});
+
 module.exports = router;

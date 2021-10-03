@@ -1,6 +1,7 @@
 import React, { FC, Suspense, lazy } from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { Provider } from "react-redux";
+require('dotenv').config({ path: './.env' });
 
 import store from "./redux/store";
 import Layout from './comps/Layout';

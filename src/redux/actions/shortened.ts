@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { SHORTENED_STORE_SHORT_URL } from '../actions/_types';
-require('dotenv').config({ path: './.env' });
 
 type ReaquestCallback = (status: boolean, message: string) => void | boolean;
 
@@ -9,7 +8,7 @@ export const createShortenedUrl = (
   callbac: ReaquestCallback
 ) => (dispatch: any) => {
   axios
-    .post(process.env.URL_BASE + '/api/add/', { origUrl })
+    .get(process.env.URL_API + '/add/?origUrl='+ encodeURI(origUrl))
     .then(response => {
       if (response.status == 200) {
         callbac(response.data.status == 'success', response.data.message);

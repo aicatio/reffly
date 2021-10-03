@@ -1,13 +1,12 @@
 const express = require('express');
 const ShortUrl = require('../models/ShortUrl');
 const checkUrlExists = require('../utils/url-exists');
-require('dotenv').config({ path: './.env' });
 
 const router = express.Router();
 const base = process.env.URL_BASE;
 
-router.post('/add', async (req, res) => {
-  const { origUrl } = req.body;
+router.get('/add', async (req, res) => {
+  const { origUrl } = req.query;
   const status = await checkUrlExists(origUrl);
 
   if (status == false) {
