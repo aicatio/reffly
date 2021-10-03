@@ -5,7 +5,7 @@ const checkUrlExists = require('../utils/url-exists');
 const router = express.Router();
 const base = process.env.URL_BASE;
 
-router.get('/add', async (req, res) => {
+router.get('/url/create.do', async (req, res) => {
   const { origUrl } = req.query;
   const status = await checkUrlExists(origUrl);
 

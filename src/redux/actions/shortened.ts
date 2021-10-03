@@ -8,7 +8,7 @@ export const createShortenedUrl = (
   callbac: ReaquestCallback
 ) => (dispatch: any) => {
   axios
-    .get(process.env.URL_API + '/add/?origUrl='+ encodeURI(origUrl))
+    .get(process.env.URL_API + '/url/create.do?origUrl='+ encodeURI(origUrl))
     .then(response => {
       if (response.status == 200) {
         callbac(response.data.status == 'success', response.data.message);
