@@ -1,5 +1,3 @@
-// @ts-expect-error
-import Carbon from 'react-carbon';
 import React from 'react';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
@@ -10,11 +8,11 @@ const SponsorshipAd = () => {
     <Grid container spacing={2} mt={5}>
       <Grid item xs={6}>
         <Grid container justifyContent="right">
-          <Paper style={{ fontSize: 12 }} elevation={0} sx={{ maxWidth: 335 }}>
-            <Carbon
-              name="carbon-home"
-              placement="pixelmobco"
-              serve="CK7I42Q7"
+          <Paper elevation={0} sx={{ maxWidth: 335 }}>
+            <img
+              style={{ maxWidth: 325 }}
+              alt="Carbon Ad"
+              src="/images/others/carbonad-v1.png"
             />
           </Paper>
         </Grid>

@@ -4,6 +4,6 @@ export interface ShortenedState {
 }
 export interface ShortenedPayload {
     type: string;
-    payload: string[];
+    payload: string[] | any;
 }
-export declare const shortenedReducer: (state: ShortenedState | undefined, action: ShortenedPayload) => ShortenedState;
+export declare const shortenedReducer: (state: ShortenedState | undefined, action: ShortenedPayload) => any;

@@ -1,7 +1,7 @@
-import React__default, { createElement, useState, Fragment } from 'react';
-import { styled, createTheme, ThemeProvider as ThemeProvider$1 } from '@mui/material/styles';
-import CssBaseline$1 from '@mui/material/CssBaseline';
-import Container$2 from '@mui/material/Container';
+import React__default, { createElement, useEffect, useState, Fragment } from 'react';
+import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import Container$1 from '@mui/material/Container';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Avatar from '@mui/material/Avatar';
@@ -14,15 +14,13 @@ import Badge from '@mui/material/Badge';
 import AddLink from '@mui/icons-material/AddLink';
 import Box$1 from '@mui/material/Box';
 import Link$1 from '@mui/material/Link';
-import { ThemeProvider } from '@mui/material//styles';
-import { CssBaseline, Container as Container$1 } from '@mui/material/';
-import { makeStyles } from '@mui/styles';
 import Facebook from '@mui/icons-material/Facebook';
 import LinkedIn from '@mui/icons-material/LinkedIn';
 import Favorite from '@mui/icons-material/Favorite';
 import CookieConsent from 'react-cookie-consent';
 import { useSelector, useDispatch } from 'react-redux';
 import { blue, grey, orange, green } from '@mui/material/colors';
+import { makeStyles } from '@mui/styles';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
@@ -34,7 +32,6 @@ import CardActions from '@mui/material/CardActions';
 import Button from '@mui/material/Button';
 import Input from '@mui/material/Input';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import Carbon from 'react-carbon';
 import Paper from '@mui/material/Paper';
 import { Link as Link$2 } from 'react-router-dom';
 import { combineReducers, createStore, applyMiddleware } from 'redux';
@@ -204,47 +201,24 @@ function Header() {
   }, React__default.createElement(GitHub, null))))), React__default.createElement(RefflyLogo, null)));
 }
 
-var useStyles = /*#__PURE__*/makeStyles(function () {
-  return {
-    root: {
-      position: 'fixed',
-      overflowX: 'hidden',
-      overflowY: 'auto',
-      padding: 0,
-      bottom: 0,
-      left: 0,
-      right: 0
-    }
-  };
-});
 function FooterLayout(_ref) {
   var sticky = _ref.sticky,
-      theme = _ref.theme,
       children = _ref.children;
-  // ToDo: add equal height blank space if sticky
-  // const theme = useTheme();
-  var classes = useStyles();
-  return React__default.createElement(ThemeProvider, {
-    theme: theme
-  }, React__default.createElement(CssBaseline, null), React__default.createElement(Container$1, {
-    disableGutters: true,
-    className: sticky ? classes.root : '',
-    maxWidth: false
-  }, React__default.createElement(Box$1, {
+  return React__default.createElement(Box$1, {
     sx: {
       borderTop: '1px solid grey'
     }
   }, React__default.createElement(AppBar, {
     color: "transparent",
     position: sticky ? 'static' : 'relative'
-  }, React__default.createElement(Toolbar, null, children)))));
+  }, React__default.createElement(Toolbar, null, children)));
 }
 
 function Footer(_ref) {
   var theme = _ref.theme;
   return React__default.createElement(FooterLayout, {
     theme: theme
-  }, React__default.createElement(Container$2, null, React__default.createElement(Box$1, {
+  }, React__default.createElement(Container$1, null, React__default.createElement(Box$1, {
     sx: {
       flexGrow: 1
     }
@@ -312,7 +286,7 @@ var CookieBanner = function CookieBanner() {
   }, "This website uses cookies to enhance the user experience, by continueing you aggree to allow cookies.") : null;
 };
 
-var theme = /*#__PURE__*/createTheme({
+var refflyTheme = {
   palette: {
     primary: {
       main: blue[800]
@@ -367,20 +341,26 @@ var theme = /*#__PURE__*/createTheme({
       }
     }
   }
-});
-
-console.log('current theme:', theme);
+};
+var defaultTheme = /*#__PURE__*/createTheme(refflyTheme);
 
 var Layout = function Layout(_ref) {
-  var children = _ref.children;
-  return React__default.createElement(React__default.Fragment, null, React__default.createElement(ThemeProvider$1, {
-    theme: theme
-  }, React__default.createElement(CssBaseline$1, null), React__default.createElement(Container$2, {
+  var children = _ref.children,
+      theme = _ref.theme;
+  useEffect(function () {
+    if (typeof process == 'object' && process.env) {
+      if (process.env.NODE_ENV == 'development') {
+        console.log('env.URL_API:', process.env.URL_API);
+        console.log('mui.defaultTheme:', defaultTheme);
+      }
+    }
+  }, []);
+  return React__default.createElement(React__default.Fragment, null, React__default.createElement(ThemeProvider, {
+    theme: theme || defaultTheme
+  }, React__default.createElement(CssBaseline, null), React__default.createElement(Container$1, {
     disableGutters: true,
     maxWidth: false
-  }, React__default.createElement(Header, null), children)), React__default.createElement(Footer, {
-    theme: theme
-  }), React__default.createElement(CookieBanner, null));
+  }, React__default.createElement(Header, null), children, React__default.createElement(Footer, null))), React__default.createElement(CookieBanner, null));
 };
 
 var Dashboard = function Dashboard() {
@@ -388,9 +368,11 @@ var Dashboard = function Dashboard() {
 };
 
 // Actions for "cookie" reducers
-var COOKIE_ADD_COOKIE = 'COOKIE_ADD_COOKIE'; // Actions for "shortened" reducers
+var COOKIE_ADD_COOKIE = 'COOKIE_ADD_COOKIE';
+var COOKIE_DELETE_COOKIE = 'COOKIE_DELETE_COOKIE'; // Actions for "shortened" reducers
 
 var SHORTENED_STORE_SHORT_URL = 'SHORTENED_STORE_SHORT_URL';
+var SHORTENED_DELETE_SHORT_URL = 'SHORTENED_DELETE_SHORT_URL';
 
 var setCookieAccepted = function setCookieAccepted() {
   return function (dispatch) {
@@ -403,7 +385,7 @@ var setCookieAccepted = function setCookieAccepted() {
 
 var createShortenedUrl = function createShortenedUrl(origUrl, callbac) {
   return function (dispatch) {
-    axios.post(process.env.URL_API + '/api/url/create', {
+    axios.post(process.env.URL_API + '/url/create', {
       origUrl: origUrl
     }).then(function (response) {
       if (response.status == 200) {
@@ -426,7 +408,7 @@ var createShortenedUrl = function createShortenedUrl(origUrl, callbac) {
   };
 };
 
-var useStyles$1 = /*#__PURE__*/makeStyles(function (theme) {
+var useStyles = /*#__PURE__*/makeStyles(function (theme) {
   return {
     boxBackground: {
       backgroundColor: theme.palette.primary.main + "15",
@@ -442,7 +424,7 @@ function ShortenerResult(_ref) {
       copied = _useState[0],
       setCopied = _useState[1];
 
-  var classes = useStyles$1();
+  var classes = useStyles();
   return React__default.createElement(CardActions, {
     className: classes.boxBackground
   }, React__default.createElement(Grid, {
@@ -591,8 +573,6 @@ function Jumptron() {
   }))));
 }
 
-// @ts-expect-error
-
 var SponsorshipAd = function SponsorshipAd() {
   return React__default.createElement(Grid, {
     container: true,
@@ -605,17 +585,16 @@ var SponsorshipAd = function SponsorshipAd() {
     container: true,
     justifyContent: "right"
   }, React__default.createElement(Paper, {
-    style: {
-      fontSize: 12
-    },
     elevation: 0,
     sx: {
       maxWidth: 335
     }
-  }, React__default.createElement(Carbon, {
-    name: "carbon-home",
-    placement: "pixelmobco",
-    serve: "CK7I42Q7"
+  }, React__default.createElement("img", {
+    style: {
+      maxWidth: 325
+    },
+    alt: "Carbon Ad",
+    src: "/images/others/carbonad-v1.png"
   })))), React__default.createElement(Grid, {
     item: true,
     xs: 6
@@ -737,28 +716,21 @@ var RefflyplusAd = function RefflyplusAd() {
   }))));
 };
 
-var useStyles$2 = /*#__PURE__*/makeStyles({
-  imgFluid: {
-    maxWidth: '100%',
-    height: 'auto',
-    filter: 'grayscale(90%)'
-  },
-  imgRounded: {
-    borderRadius: '6px !important'
-  },
-  imgRoundedCircle: {
-    borderRadius: '50% !important'
-  },
-  imgRaised: {
-    boxShadow: '0 5px 15px -8px rgba(0, 0, 0, 0.24), 0 8px 10px -5px rgba(0, 0, 0, 0.2)'
-  }
-});
-
 var StackLogo = function StackLogo(_ref) {
   var _ref$imgStyle = _ref.imgStyle,
       imgStyle = _ref$imgStyle === void 0 ? {} : _ref$imgStyle,
       imgUrl = _ref.imgUrl;
-  var classes = useStyles$2();
+  var useStyles = makeStyles({
+    imgFluid: {
+      maxWidth: '100%',
+      height: 'auto',
+      filter: 'grayscale(90%)'
+    },
+    imgRounded: {
+      borderRadius: '6px !important'
+    }
+  });
+  var classes = useStyles();
   return React__default.createElement(Paper, {
     elevation: 0,
     sx: {
@@ -843,7 +815,7 @@ var TechnologyStack = function TechnologyStack() {
   }, "Freelancer.com")))));
 };
 
-var AicatAd = function AicatAd() {
+var AicatpromoAd = function AicatpromoAd() {
   return React__default.createElement(Grid, {
     spacing: 3,
     container: true,
@@ -864,31 +836,30 @@ var AicatAd = function AicatAd() {
   })));
 };
 
-var useStyles$3 = /*#__PURE__*/makeStyles(function (theme) {
-  return {
-    boxBackground: {
-      backgroundColor: theme.palette.primary.main + "15"
-    },
-    boxBottomLeft: {
-      backgroundColor: theme.palette.background["default"],
-      borderTopRightRadius: 200,
-      height: 50
-    },
-    boxBottomRight: {
-      backgroundColor: theme.palette.background["default"],
-      borderTopLeftRadius: 200,
-      height: 50
-    }
-  };
-});
-
 var Homepage = function Homepage() {
-  var classes = useStyles$3();
-  return React__default.createElement(Fragment, null, React__default.createElement(Container$2, null, React__default.createElement(Jumptron, null), React__default.createElement(SponsorshipAd, null)), React__default.createElement(Grid, {
+  var useStyles = makeStyles(function (theme) {
+    return {
+      boxBackground: {
+        backgroundColor: theme.palette.primary.main + "15"
+      },
+      boxBottomLeft: {
+        backgroundColor: theme.palette.background["default"],
+        borderTopRightRadius: 200,
+        height: 50
+      },
+      boxBottomRight: {
+        backgroundColor: theme.palette.background["default"],
+        borderTopLeftRadius: 200,
+        height: 50
+      }
+    };
+  });
+  var classes = useStyles();
+  return React__default.createElement(Fragment, null, React__default.createElement(Container$1, null, React__default.createElement(Jumptron, null), React__default.createElement(SponsorshipAd, null)), React__default.createElement(Grid, {
     className: classes.boxBackground,
     item: true,
     xs: 12
-  }, React__default.createElement(Container$2, null, React__default.createElement(RefflyplusAd, null), React__default.createElement(TechnologyStack, null)), React__default.createElement(Grid, {
+  }, React__default.createElement(Container$1, null, React__default.createElement(RefflyplusAd, null), React__default.createElement(TechnologyStack, null)), React__default.createElement(Grid, {
     container: true
   }, React__default.createElement(Grid, {
     item: true,
@@ -898,7 +869,7 @@ var Homepage = function Homepage() {
     item: true,
     xs: 6,
     className: classes.boxBottomRight
-  }))), React__default.createElement(Container$2, null, React__default.createElement(AicatAd, null)));
+  }))), React__default.createElement(Container$1, null, React__default.createElement(AicatpromoAd, null)));
 };
 
 var Error404 = function Error404() {
@@ -1075,6 +1046,15 @@ var cookieReducer = function cookieReducer(state, action) {
         return _extends({}, state, newCookie);
       }
 
+    case COOKIE_DELETE_COOKIE:
+      {
+        Cookies.remove('Reffly_' + action.payload); // @ts-expect-error
+
+        return state.filter(function (value, index) {
+          return index !== action.payload;
+        });
+      }
+
     default:
       return state;
   }
@@ -1100,6 +1080,15 @@ var shortenedReducer = function shortenedReducer(state, action) {
         };
       }
 
+    case SHORTENED_DELETE_SHORT_URL:
+      {
+        Cookies.remove('Reffly_' + action.payload); // @ts-expect-error
+
+        return state.filter(function (value, index) {
+          return index !== action.payload;
+        });
+      }
+
     default:
       return state;
   }
@@ -1114,5 +1103,14 @@ var rootReducer = /*#__PURE__*/combineReducers(allReducers);
 var composer = /*#__PURE__*/composeWithDevTools( /*#__PURE__*/applyMiddleware(thunk));
 var store = /*#__PURE__*/createStore(rootReducer, composer);
 
-export { Dashboard, Error404, Homepage, Layout, PrivacyPolicy, TcsofService, TempPage, allReducers as refflyReducers, store };
+/**
+ * PROJECT SETTINGS
+ * ---------------------------------------------------------
+ * To replce settings, add a reffconf.ts file at prooject root
+ * ---------------------------------------------------------
+ * root dir process.env.PWD
+ */
+var configs = /*#__PURE__*/require("../reffconf")["default"];
+
+export { Dashboard, Error404, Homepage, Layout, PrivacyPolicy, TcsofService, TempPage, configs as refflyConfig, allReducers as refflyReducers, refflyTheme, store };
 //# sourceMappingURL=reffly.esm.js.map

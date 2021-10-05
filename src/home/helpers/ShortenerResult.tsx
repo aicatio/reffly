@@ -5,7 +5,6 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Input from '@mui/material/Input';
 import { makeStyles } from '@mui/styles';
-
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const useStyles = makeStyles((theme: any) => ({
@@ -18,6 +17,9 @@ const useStyles = makeStyles((theme: any) => ({
 
 export default function ShortenerResult({ shortUrl }: any) {
   const [copied, setCopied] = useState(false);
+
+
+
   const classes = useStyles();
 
   return (

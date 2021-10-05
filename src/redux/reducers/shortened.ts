@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie';
 
 import { SHORTENED_STORE_SHORT_URL } from '../actions/_types';
+import { SHORTENED_DELETE_SHORT_URL } from '../actions/_types';
 
 export interface ShortenedState {
   shortUrl: string | undefined;
@@ -8,7 +9,7 @@ export interface ShortenedState {
 }
 export interface ShortenedPayload {
   type: string;
-  payload: string[];
+  payload: string[] | any;
 }
 
 const initialState = {
@@ -28,6 +29,11 @@ export const shortenedReducer = (
         origUrl: action.payload[0],
         shortUrl: action.payload[1],
       };
+    }
+    case SHORTENED_DELETE_SHORT_URL: { 
+      Cookies.remove('Reffly_' + action.payload);
+      // @ts-expect-error
+      return state.filter((value, index: string) => index !== action.payload);
     }
     default:
       return state;

@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import { Typography } from '@mui/material';
 
 
-const AicatAd = () => {
+const AicatpromoAd = () => {
   return (
     <Grid spacing={3} container pb={5}>
       <Grid item xs={6}>
@@ -18,4 +18,4 @@ const AicatAd = () => {
   );
 };
 
-export default AicatAd;
+export default AicatpromoAd;

@@ -1,15 +1,9 @@
 declare const allReducers: {
-    shortened: (state: import("./shortened").ShortenedState | undefined, action: import("./shortened").ShortenedPayload) => import("./shortened").ShortenedState;
-    cookie: (state: any, action: {
-        type: string;
-        payload: [string, any];
-    }) => any;
+    shortened: (state: import("./shortened").ShortenedState | undefined, action: import("./shortened").ShortenedPayload) => any;
+    cookie: (state: any, action: import("./cookie").ActionInterface) => any;
 };
 export declare const rootReducer: import("redux").Reducer<import("redux").CombinedState<{
-    shortened: import("./shortened").ShortenedState;
+    shortened: any;
     cookie: any;
-}>, import("./shortened").ShortenedPayload | {
-    type: string;
-    payload: [string, any];
-}>;
+}>, import("./shortened").ShortenedPayload>;
 export default allReducers;

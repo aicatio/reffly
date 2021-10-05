@@ -1,0 +1,8 @@
+name: 'Prepare for publishing'
+description: 'An action for preparing NPM package'
+outputs:
+  version:
+    description: 'New version number'
+runs:
+  using: 'node12'
+  main: 'build/index.js'

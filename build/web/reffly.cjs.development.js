@@ -21,15 +21,13 @@ var Badge = _interopDefault(require('@mui/material/Badge'));
 var AddLink = _interopDefault(require('@mui/icons-material/AddLink'));
 var Box = _interopDefault(require('@mui/material/Box'));
 var Link = _interopDefault(require('@mui/material/Link'));
-var styles$1 = require('@mui/material//styles');
-var _ = require('@mui/material/');
-var styles$2 = require('@mui/styles');
 var Facebook = _interopDefault(require('@mui/icons-material/Facebook'));
 var LinkedIn = _interopDefault(require('@mui/icons-material/LinkedIn'));
 var Favorite = _interopDefault(require('@mui/icons-material/Favorite'));
 var CookieConsent = _interopDefault(require('react-cookie-consent'));
 var reactRedux = require('react-redux');
 var colors = require('@mui/material/colors');
+var styles$1 = require('@mui/styles');
 var Card = _interopDefault(require('@mui/material/Card'));
 var CardContent = _interopDefault(require('@mui/material/CardContent'));
 var TextField = _interopDefault(require('@mui/material/TextField'));
@@ -41,7 +39,6 @@ var CardActions = _interopDefault(require('@mui/material/CardActions'));
 var Button = _interopDefault(require('@mui/material/Button'));
 var Input = _interopDefault(require('@mui/material/Input'));
 var reactCopyToClipboard = require('react-copy-to-clipboard');
-var Carbon = _interopDefault(require('react-carbon'));
 var Paper = _interopDefault(require('@mui/material/Paper'));
 var reactRouterDom = require('react-router-dom');
 var redux = require('redux');
@@ -211,40 +208,17 @@ function Header() {
   }, React__default.createElement(GitHub, null))))), React__default.createElement(RefflyLogo, null)));
 }
 
-var useStyles = /*#__PURE__*/styles$2.makeStyles(function () {
-  return {
-    root: {
-      position: 'fixed',
-      overflowX: 'hidden',
-      overflowY: 'auto',
-      padding: 0,
-      bottom: 0,
-      left: 0,
-      right: 0
-    }
-  };
-});
 function FooterLayout(_ref) {
   var sticky = _ref.sticky,
-      theme = _ref.theme,
       children = _ref.children;
-  // ToDo: add equal height blank space if sticky
-  // const theme = useTheme();
-  var classes = useStyles();
-  return React__default.createElement(styles$1.ThemeProvider, {
-    theme: theme
-  }, React__default.createElement(_.CssBaseline, null), React__default.createElement(_.Container, {
-    disableGutters: true,
-    className: sticky ? classes.root : '',
-    maxWidth: false
-  }, React__default.createElement(Box, {
+  return React__default.createElement(Box, {
     sx: {
       borderTop: '1px solid grey'
     }
   }, React__default.createElement(AppBar, {
     color: "transparent",
     position: sticky ? 'static' : 'relative'
-  }, React__default.createElement(Toolbar, null, children)))));
+  }, React__default.createElement(Toolbar, null, children)));
 }
 
 function Footer(_ref) {
@@ -319,7 +293,7 @@ var CookieBanner = function CookieBanner() {
   }, "This website uses cookies to enhance the user experience, by continueing you aggree to allow cookies.") : null;
 };
 
-var theme = /*#__PURE__*/styles.createTheme({
+var refflyTheme = {
   palette: {
     primary: {
       main: colors.blue[800]
@@ -374,20 +348,26 @@ var theme = /*#__PURE__*/styles.createTheme({
       }
     }
   }
-});
-
-console.log('current theme:', theme);
+};
+var defaultTheme = /*#__PURE__*/styles.createTheme(refflyTheme);
 
 var Layout = function Layout(_ref) {
-  var children = _ref.children;
+  var children = _ref.children,
+      theme = _ref.theme;
+  React.useEffect(function () {
+    if (typeof process == 'object' && process.env) {
+      {
+        console.log('env.URL_API:', process.env.URL_API);
+        console.log('mui.defaultTheme:', defaultTheme);
+      }
+    }
+  }, []);
   return React__default.createElement(React__default.Fragment, null, React__default.createElement(styles.ThemeProvider, {
-    theme: theme
+    theme: theme || defaultTheme
   }, React__default.createElement(CssBaseline, null), React__default.createElement(Container, {
     disableGutters: true,
     maxWidth: false
-  }, React__default.createElement(Header, null), children)), React__default.createElement(Footer, {
-    theme: theme
-  }), React__default.createElement(CookieBanner, null));
+  }, React__default.createElement(Header, null), children, React__default.createElement(Footer, null))), React__default.createElement(CookieBanner, null));
 };
 
 var Dashboard = function Dashboard() {
@@ -395,9 +375,11 @@ var Dashboard = function Dashboard() {
 };
 
 // Actions for "cookie" reducers
-var COOKIE_ADD_COOKIE = 'COOKIE_ADD_COOKIE'; // Actions for "shortened" reducers
+var COOKIE_ADD_COOKIE = 'COOKIE_ADD_COOKIE';
+var COOKIE_DELETE_COOKIE = 'COOKIE_DELETE_COOKIE'; // Actions for "shortened" reducers
 
 var SHORTENED_STORE_SHORT_URL = 'SHORTENED_STORE_SHORT_URL';
+var SHORTENED_DELETE_SHORT_URL = 'SHORTENED_DELETE_SHORT_URL';
 
 var setCookieAccepted = function setCookieAccepted() {
   return function (dispatch) {
@@ -410,7 +392,7 @@ var setCookieAccepted = function setCookieAccepted() {
 
 var createShortenedUrl = function createShortenedUrl(origUrl, callbac) {
   return function (dispatch) {
-    axios.post(process.env.URL_API + '/api/url/create', {
+    axios.post(process.env.URL_API + '/url/create', {
       origUrl: origUrl
     }).then(function (response) {
       if (response.status == 200) {
@@ -433,7 +415,7 @@ var createShortenedUrl = function createShortenedUrl(origUrl, callbac) {
   };
 };
 
-var useStyles$1 = /*#__PURE__*/styles$2.makeStyles(function (theme) {
+var useStyles = /*#__PURE__*/styles$1.makeStyles(function (theme) {
   return {
     boxBackground: {
       backgroundColor: theme.palette.primary.main + "15",
@@ -449,7 +431,7 @@ function ShortenerResult(_ref) {
       copied = _useState[0],
       setCopied = _useState[1];
 
-  var classes = useStyles$1();
+  var classes = useStyles();
   return React__default.createElement(CardActions, {
     className: classes.boxBackground
   }, React__default.createElement(Grid, {
@@ -598,8 +580,6 @@ function Jumptron() {
   }))));
 }
 
-// @ts-expect-error
-
 var SponsorshipAd = function SponsorshipAd() {
   return React__default.createElement(Grid, {
     container: true,
@@ -612,17 +592,16 @@ var SponsorshipAd = function SponsorshipAd() {
     container: true,
     justifyContent: "right"
   }, React__default.createElement(Paper, {
-    style: {
-      fontSize: 12
-    },
     elevation: 0,
     sx: {
       maxWidth: 335
     }
-  }, React__default.createElement(Carbon, {
-    name: "carbon-home",
-    placement: "pixelmobco",
-    serve: "CK7I42Q7"
+  }, React__default.createElement("img", {
+    style: {
+      maxWidth: 325
+    },
+    alt: "Carbon Ad",
+    src: "/images/others/carbonad-v1.png"
   })))), React__default.createElement(Grid, {
     item: true,
     xs: 6
@@ -744,28 +723,21 @@ var RefflyplusAd = function RefflyplusAd() {
   }))));
 };
 
-var useStyles$2 = /*#__PURE__*/styles$2.makeStyles({
-  imgFluid: {
-    maxWidth: '100%',
-    height: 'auto',
-    filter: 'grayscale(90%)'
-  },
-  imgRounded: {
-    borderRadius: '6px !important'
-  },
-  imgRoundedCircle: {
-    borderRadius: '50% !important'
-  },
-  imgRaised: {
-    boxShadow: '0 5px 15px -8px rgba(0, 0, 0, 0.24), 0 8px 10px -5px rgba(0, 0, 0, 0.2)'
-  }
-});
-
 var StackLogo = function StackLogo(_ref) {
   var _ref$imgStyle = _ref.imgStyle,
       imgStyle = _ref$imgStyle === void 0 ? {} : _ref$imgStyle,
       imgUrl = _ref.imgUrl;
-  var classes = useStyles$2();
+  var useStyles = styles$1.makeStyles({
+    imgFluid: {
+      maxWidth: '100%',
+      height: 'auto',
+      filter: 'grayscale(90%)'
+    },
+    imgRounded: {
+      borderRadius: '6px !important'
+    }
+  });
+  var classes = useStyles();
   return React__default.createElement(Paper, {
     elevation: 0,
     sx: {
@@ -850,7 +822,7 @@ var TechnologyStack = function TechnologyStack() {
   }, "Freelancer.com")))));
 };
 
-var AicatAd = function AicatAd() {
+var AicatpromoAd = function AicatpromoAd() {
   return React__default.createElement(Grid, {
     spacing: 3,
     container: true,
@@ -871,26 +843,25 @@ var AicatAd = function AicatAd() {
   })));
 };
 
-var useStyles$3 = /*#__PURE__*/styles$2.makeStyles(function (theme) {
-  return {
-    boxBackground: {
-      backgroundColor: theme.palette.primary.main + "15"
-    },
-    boxBottomLeft: {
-      backgroundColor: theme.palette.background["default"],
-      borderTopRightRadius: 200,
-      height: 50
-    },
-    boxBottomRight: {
-      backgroundColor: theme.palette.background["default"],
-      borderTopLeftRadius: 200,
-      height: 50
-    }
-  };
-});
-
 var Homepage = function Homepage() {
-  var classes = useStyles$3();
+  var useStyles = styles$1.makeStyles(function (theme) {
+    return {
+      boxBackground: {
+        backgroundColor: theme.palette.primary.main + "15"
+      },
+      boxBottomLeft: {
+        backgroundColor: theme.palette.background["default"],
+        borderTopRightRadius: 200,
+        height: 50
+      },
+      boxBottomRight: {
+        backgroundColor: theme.palette.background["default"],
+        borderTopLeftRadius: 200,
+        height: 50
+      }
+    };
+  });
+  var classes = useStyles();
   return React__default.createElement(React.Fragment, null, React__default.createElement(Container, null, React__default.createElement(Jumptron, null), React__default.createElement(SponsorshipAd, null)), React__default.createElement(Grid, {
     className: classes.boxBackground,
     item: true,
@@ -905,7 +876,7 @@ var Homepage = function Homepage() {
     item: true,
     xs: 6,
     className: classes.boxBottomRight
-  }))), React__default.createElement(Container, null, React__default.createElement(AicatAd, null)));
+  }))), React__default.createElement(Container, null, React__default.createElement(AicatpromoAd, null)));
 };
 
 var Error404 = function Error404() {
@@ -1082,6 +1053,15 @@ var cookieReducer = function cookieReducer(state, action) {
         return _extends({}, state, newCookie);
       }
 
+    case COOKIE_DELETE_COOKIE:
+      {
+        Cookies.remove('Reffly_' + action.payload); // @ts-expect-error
+
+        return state.filter(function (value, index) {
+          return index !== action.payload;
+        });
+      }
+
     default:
       return state;
   }
@@ -1107,6 +1087,15 @@ var shortenedReducer = function shortenedReducer(state, action) {
         };
       }
 
+    case SHORTENED_DELETE_SHORT_URL:
+      {
+        Cookies.remove('Reffly_' + action.payload); // @ts-expect-error
+
+        return state.filter(function (value, index) {
+          return index !== action.payload;
+        });
+      }
+
     default:
       return state;
   }
@@ -1121,6 +1110,15 @@ var rootReducer = /*#__PURE__*/redux.combineReducers(allReducers);
 var composer = /*#__PURE__*/reduxDevtoolsExtension.composeWithDevTools( /*#__PURE__*/redux.applyMiddleware(thunk));
 var store = /*#__PURE__*/redux.createStore(rootReducer, composer);
 
+/**
+ * PROJECT SETTINGS
+ * ---------------------------------------------------------
+ * To replce settings, add a reffconf.ts file at prooject root
+ * ---------------------------------------------------------
+ * root dir process.env.PWD
+ */
+var configs = /*#__PURE__*/require("../reffconf")["default"];
+
 exports.Dashboard = Dashboard;
 exports.Error404 = Error404;
 exports.Homepage = Homepage;
@@ -1128,6 +1126,8 @@ exports.Layout = Layout;
 exports.PrivacyPolicy = PrivacyPolicy;
 exports.TcsofService = TcsofService;
 exports.TempPage = TempPage;
+exports.refflyConfig = configs;
 exports.refflyReducers = allReducers;
+exports.refflyTheme = refflyTheme;
 exports.store = store;
 //# sourceMappingURL=reffly.cjs.development.js.map

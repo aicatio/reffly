@@ -1,0 +1,17 @@
+{
+  "name": "actions-public",
+  "version": "1.0.0",
+  "license": "BSD-3-Clause",
+  "main": "index.js",
+  "scripts": {
+    "build": "ncc build index.js --license licenses.txt  -o build"
+  },
+  "dependencies": {
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.0.0",
+    "@vercel/ncc": "^0.31.1", 
+    "jsonfile": "^6.1.0",
+    "latest-version": "^6.0.0", 
+    "semver-increment": "^1.0.1"
+  }
+}

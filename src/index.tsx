@@ -9,3 +9,5 @@ export { default as TcsofService } from './legal/TcsofService'
 export { default as PrivacyPolicy } from './legal/PrivacyPolicy'
 export { default as store } from "./redux/store";
 export { default as refflyReducers } from "./redux/reducers/_combine";
+export { default as refflyConfig } from './configs'
+export { refflyTheme } from "./theme";

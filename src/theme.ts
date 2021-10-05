@@ -13,7 +13,7 @@ declare module '@mui/material/styles' {
   }
 }
 
-export const theme = createTheme({
+export const refflyTheme = {
   palette: {
     primary: {
       main: blue[800],
@@ -56,6 +56,8 @@ export const theme = createTheme({
       },
     },
   },
-});
+};
+
+export const defaultTheme = createTheme(refflyTheme);
 
 
