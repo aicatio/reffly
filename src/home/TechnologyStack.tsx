@@ -20,25 +20,25 @@ const TechnologyStack = () => {
           </Typography>
 
           <Grid justifyContent="center" container spacing={2}>
-            <Grid item xs>
+            <Grid item xs={8} sm={4}>
               <StackLogo
                 imgStyle={{ marginTop: '10px', marginBottom: '10px' }}
                 imgUrl="/images/logos/nodejs-v2.svg"
               />
             </Grid>
-            <Grid item xs>
+            <Grid item xs={8} sm={4}>
               <StackLogo
                 imgStyle={{ marginTop: '8px', marginBottom: '8px' }}
                 imgUrl="/images/logos/mongodb-v1.svg"
               />
             </Grid>
-            <Grid item xs>
+            <Grid item xs={8} sm={4}>
               <StackLogo
                 imgStyle={{ marginTop: '18px', marginBottom: '18px' }}
                 imgUrl="/images/logos/nginx-v1.svg"
               />
             </Grid>
-            <Grid item xs>
+            <Grid item xs={8} sm={4}>
               <StackLogo
                 imgStyle={{ marginTop: '-80px', marginBottom: '-90px' }}
                 imgUrl="/images/logos/heroku-v1.svg"

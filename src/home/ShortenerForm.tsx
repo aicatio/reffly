@@ -65,12 +65,12 @@ export default function ShortenerForm() {
 
   return (
     <Grid container justifyContent="center">
-      <Grid item xs={9}>
+      <Grid item xs={12} sm={9}>
         <Card sx={{ minWidth: 275 }}>
           <CardContent sx={{ p: 4, pb: 2 }}>
             <form onSubmit={formik.handleSubmit}>
               <Grid container spacing={2}>
-                <Grid item xs={9}>
+                <Grid item xs={12} sm={8} md={9}>
                   <TextField
                     fullWidth
                     name="origUrl"
@@ -86,7 +86,7 @@ export default function ShortenerForm() {
                     variant="outlined"
                   />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={12} sm={4} md={3}>
                   <LoadingButton color="primary" fullWidth {...submitBtnProps}>
                     {formik.isSubmitting ? 'Processing...' : 'SHORTEN'}
                   </LoadingButton>
