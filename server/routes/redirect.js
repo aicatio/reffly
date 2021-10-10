@@ -1,5 +1,6 @@
 const express = require('express');
 const ShortUrl = require('../models/ShortUrl');
+const configs = require('../configs');
 require('dotenv').config({ path: './.env' });
 
 const router = express.Router();
@@ -10,7 +11,7 @@ router.get('/:urlId', async (req, res) => {
     if (searchUrl) {
       res.redirect(searchUrl.origUrl);
     } else {
-      res.redirect(process.env.URL_WEB + '/404');
+      res.redirect(configs.url_web + '/404');
     }
   } catch (err) {
     console.log(err);
@@ -19,7 +20,7 @@ router.get('/:urlId', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-  res.redirect(process.env.URL_WEB);
+  res.redirect(configs.url_web);
 });
 
 module.exports = router;

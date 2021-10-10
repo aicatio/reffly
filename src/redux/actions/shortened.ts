@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { SHORTENED_STORE_SHORT_URL } from '../actions/_types';
+import configs from '../../configs'
 
 type ReaquestCallback = (status: boolean, message: string) => void | boolean;
 
@@ -8,7 +9,7 @@ export const createShortenedUrl = (
   callbac: ReaquestCallback
 ) => (dispatch: any) => {
   axios
-    .post(process.env.URL_API + '/url/create', { origUrl })
+    .post(configs.url_api + '/url/create', { origUrl })
     .then(response => {
       if (response.status == 200) {
         callbac(response.data.status == 'success', response.data.message);

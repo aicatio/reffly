@@ -9,9 +9,10 @@
   "dependencies": {
     "@actions/core": "^1.6.0",
     "@actions/github": "^5.0.0",
-    "@vercel/ncc": "^0.31.1", 
+    "@vercel/ncc": "^0.31.1",
+    "git-commands": "^0.1.0",
     "jsonfile": "^6.1.0",
-    "latest-version": "^6.0.0", 
+    "latest-version": "^6.0.0",
     "semver-increment": "^1.0.1"
   }
 }

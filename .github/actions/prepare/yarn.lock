@@ -229,6 +229,11 @@ get-stream@^5.1.0:
   dependencies:
     pump "^3.0.0"
 
+git-commands@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/git-commands/-/git-commands-0.1.0.tgz#20cd2ef1db782006b4d50b7870cfdc89e10e61eb"
+  integrity sha512-n6sJ/1hvuvvRfnjvUuG+fnTRyiBAv9c3FKZ01BOreo1v8hZhZbFONv7D02IVSNc9Pwmlxdjg69663KpRVCax9w==
+
 got@^11.8.2:
   version "11.8.2"
   resolved "https://registry.yarnpkg.com/got/-/got-11.8.2.tgz#7abb3959ea28c31f3576f1576c1effce23f33599"

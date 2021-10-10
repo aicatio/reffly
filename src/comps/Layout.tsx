@@ -7,7 +7,9 @@ import Header from './Header';
 import Footer from './Footer';
 import CookieBanner from './miscs/CookieBanner';
 
+
 import { defaultTheme } from '../theme';
+import configs from '../configs'
 
 interface LayoutInterface {
   children: any;
@@ -18,8 +20,8 @@ const Layout: FC<LayoutInterface> = ({ children, theme }: LayoutInterface) => {
   useEffect(() => {
     if (typeof process == 'object' && process.env) {
       if (process.env.NODE_ENV == 'development') {
-        console.log('env.URL_API:', process.env.URL_API);
-        console.log('mui.defaultTheme:', defaultTheme);
+        console.log('reffly.theme:', defaultTheme);
+        console.log('reffly.confs:', configs);
       }
     }
   }, [])

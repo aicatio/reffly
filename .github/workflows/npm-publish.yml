@@ -1,4 +1,4 @@
-name: NPM Publish
+name: NPM
 
 on:
   push:
@@ -11,12 +11,30 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/prepare
-      - uses: actions/setup-node@v2
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2
         with:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
-      - run: cd build && npm publish --access public
+      - name: Prepare build
+        id: prepare_build
+        uses: ./.github/actions/prepare
+      - name: Test Step
+        run: echo "The tag ref is - ${{ steps.prepare_build.outputs.tag_ref }}"
+      - name: Publish Pkg
+        run: cd build && npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTOMATION_TOKEN }}
+      - name: Create tag
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            github.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: "${{ steps.prepare_build.outputs.tag_ref }}",
+              sha: context.sha
+            })

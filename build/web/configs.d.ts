@@ -1,7 +1,7 @@
 /**
  * PROJECT SETTINGS
  * ---------------------------------------------------------
- * To replce settings, add a reffconf.ts file at prooject root
+ * To replce settings, add a reffconf.js file at prooject root
  * ---------------------------------------------------------
  * root dir process.env.PWD
  */

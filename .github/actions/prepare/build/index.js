@@ -3120,6 +3120,40 @@ module.exports.MaxBufferError = MaxBufferError;
 
 /***/ }),
 
+/***/ 7584:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+/**
+ * 
+ * @desc git-commands
+ * @date 2018-07-03
+ * @author gavinning gavinning@qq.com
+ *
+ * @history
+ *    created at 2018-07-03 by gavinning
+ *
+ */
+
+const { execFileSync } = __nccwpck_require__(3129)
+
+class Git {
+    constructor({ reps }) {
+        this.reps = reps
+    }
+
+    command(cmd) {
+        return execFileSync('git', Array.isArray(cmd) ? cmd : cmd.split(' '), {cwd: this.reps}).toString('utf8')
+    }
+
+    pull() {
+        return this.command('pull')
+    }
+}
+
+module.exports = Git
+
+/***/ }),
+
 /***/ 6457:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -14881,6 +14915,14 @@ module.exports = require("buffer");
 
 /***/ }),
 
+/***/ 3129:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("child_process");
+
+/***/ }),
+
 /***/ 7619:
 /***/ ((module) => {
 
@@ -15063,12 +15105,15 @@ const core = __nccwpck_require__(2186);
 const jsonfile = __nccwpck_require__(6160);
 const bumpVersion = __nccwpck_require__(4696);
 const latestVersion = __nccwpck_require__(8354)/* .default */ .Z;
+const Git = __nccwpck_require__(7584);
 const fs = __nccwpck_require__(5747);
 
 (async function() {
   try {
     // Workdir path
     const projPath = process.env.GITHUB_WORKSPACE;
+    const git = new Git({ reps: projPath });
+
     if (fs.existsSync(`${projPath}/package.json`)) {
       // Get the current version & calculate next version
       const verNum = await latestVersion('@aicat/reffly');
@@ -15087,9 +15132,12 @@ const fs = __nccwpck_require__(5747);
         JSON.stringify(package, null, 2)
       );
 
+      // Test git commands, will use git later
+      console.log(git.command('--version'));
+
       // Broadcust the output
-      core.setOutput('version', nextVer);
-      console.log('package:', package);
+      core.setOutput('tag_ref', `refs/tags/v${nextVer}`);
+      console.log('tag_ref:', `refs/tags/v${nextVer}`);
     } else {
       core.setFailed('Please checkout first, i.e, - uses: actions/checkout@v2');
     }

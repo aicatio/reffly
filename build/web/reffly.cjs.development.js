@@ -351,14 +351,23 @@ var refflyTheme = {
 };
 var defaultTheme = /*#__PURE__*/styles.createTheme(refflyTheme);
 
+/**
+ * PROJECT SETTINGS
+ * ---------------------------------------------------------
+ * To replce settings, add a reffconf.js file at prooject root
+ * ---------------------------------------------------------
+ * root dir process.env.PWD
+ */
+var configs = /*#__PURE__*/require("../reffconf")["default"];
+
 var Layout = function Layout(_ref) {
   var children = _ref.children,
       theme = _ref.theme;
   React.useEffect(function () {
     if (typeof process == 'object' && process.env) {
       {
-        console.log('env.URL_API:', process.env.URL_API);
-        console.log('mui.defaultTheme:', defaultTheme);
+        console.log('reffly.theme:', defaultTheme);
+        console.log('reffly.confs:', configs);
       }
     }
   }, []);
@@ -392,7 +401,7 @@ var setCookieAccepted = function setCookieAccepted() {
 
 var createShortenedUrl = function createShortenedUrl(origUrl, callbac) {
   return function (dispatch) {
-    axios.post(process.env.URL_API + '/url/create', {
+    axios.post(configs.url_api + '/url/create', {
       origUrl: origUrl
     }).then(function (response) {
       if (response.status == 200) {
@@ -1109,15 +1118,6 @@ var rootReducer = /*#__PURE__*/redux.combineReducers(allReducers);
 
 var composer = /*#__PURE__*/reduxDevtoolsExtension.composeWithDevTools( /*#__PURE__*/redux.applyMiddleware(thunk));
 var store = /*#__PURE__*/redux.createStore(rootReducer, composer);
-
-/**
- * PROJECT SETTINGS
- * ---------------------------------------------------------
- * To replce settings, add a reffconf.ts file at prooject root
- * ---------------------------------------------------------
- * root dir process.env.PWD
- */
-var configs = /*#__PURE__*/require("../reffconf")["default"];
 
 exports.Dashboard = Dashboard;
 exports.Error404 = Error404;

@@ -6,5 +6,5 @@
  * root dir process.env.PWD
  */
 
-export default require('!/reffconf').default
-
+require = require('esm')(module /*, options*/);
+module.exports = require('../reffconf').default;
