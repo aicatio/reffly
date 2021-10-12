@@ -26,7 +26,7 @@ type StateType = {
   shortened: ShortenedState;
 };
 
-export default function Jumptron() {
+export default function ShortenerForm() {
   const dispatch = useDispatch();
   const { shortUrl, origUrl } = useSelector(
     (state: StateType) => state.shortened

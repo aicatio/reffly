@@ -484,7 +484,7 @@ function ShortenerResult(_ref) {
 var validationSchema = /*#__PURE__*/object().shape({
   origUrl: /*#__PURE__*/string().required('Original Url is required').url('Please enter a valid Url')
 });
-function Jumptron() {
+function ShortenerForm() {
   var dispatch = useDispatch();
 
   var _useSelector = useSelector(function (state) {
@@ -864,7 +864,7 @@ var Homepage = function Homepage() {
     };
   });
   var classes = useStyles();
-  return React__default.createElement(Fragment, null, React__default.createElement(Container$1, null, React__default.createElement(Jumptron, null), React__default.createElement(SponsorshipAd, null)), React__default.createElement(Grid, {
+  return React__default.createElement(Fragment, null, React__default.createElement(Container$1, null, React__default.createElement(ShortenerForm, null), React__default.createElement(SponsorshipAd, null)), React__default.createElement(Grid, {
     className: classes.boxBackground,
     item: true,
     xs: 12
@@ -888,7 +888,7 @@ var Error404 = function Error404() {
 var validationSchema$1 = /*#__PURE__*/object().shape({
   origUrl: /*#__PURE__*/string().required("Original Url is required").url("Please enter a valid Url")
 });
-function Jumptron$1() {
+function Jumptron() {
   var _useState = useState('http://localhost:3101/JRG5ai'),
       shortUrl = _useState[0],
       setShortUrl = _useState[1];
@@ -1010,7 +1010,7 @@ var TempPage = function TempPage() {
     container: true,
     my: 10,
     justifyContent: "center"
-  }, React__default.createElement(Jumptron$1, null));
+  }, React__default.createElement(Jumptron, null));
 };
 
 var TcsofService = function TcsofService() {
