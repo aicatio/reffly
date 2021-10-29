@@ -15,16 +15,16 @@ import Favorite from '@mui/icons-material/Favorite';
 
 export default function Footer({ theme }: any) {
   return (
-    <FooterLayout theme={theme}>
-      <Container>
-        <Box sx={{ flexGrow: 1 }}>
+    <FooterLayout theme={theme} xs={12}>
+      <Container sx={{ flexGrow: 1, width:"120%", marginLeft:"auto" }}>
+        <Box sx={{ flexGrow: 1, width:"100%", margin:"0" }}>
           <AppBar
             sx={{ boxShadow: 0, p: 0 }}
             color="transparent"
             position="static"
           >
-            <Toolbar>
-              <Typography component="div" sx={{ flexGrow: 1 }}>
+            <Toolbar >
+              <Typography component="div" sx={{ flexGrow: 1, marginRight:"1%" }}>
                 Made with <Favorite color="error" /> in <b>Bangladesh</b>
               </Typography>
               <Typography variant="body2" component="div" sx={{ flexGrow: 1 }}>

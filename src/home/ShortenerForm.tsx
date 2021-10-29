@@ -16,6 +16,7 @@ import { ShortenedState } from '../redux/reducers/shortened';
 import { createShortenedUrl } from '../redux/actions/shortened';
 import ShortenerResult from './helpers/ShortenerResult';
 
+
 const validationSchema = object().shape({
   origUrl: string()
     .required('Original Url is required')
@@ -64,44 +65,50 @@ export default function ShortenerForm() {
   }
 
   return (
-    <Grid container justifyContent="center">
-      <Grid item xs={12} sm={9}>
-        <Card sx={{ minWidth: 275 }}>
-          <CardContent sx={{ p: 4, pb: 2 }}>
-            <form onSubmit={formik.handleSubmit}>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={8} md={9}>
-                  <TextField
-                    fullWidth
-                    name="origUrl"
-                    disabled={formik.isSubmitting}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values.origUrl}
-                    error={
-                      formik.touched.origUrl && Boolean(formik.errors.origUrl)
-                    }
-                    helperText={formik.touched.origUrl && formik.errors.origUrl}
-                    placeholder="Enter your long Url here"
-                    variant="outlined"
-                  />
+      <Grid container justifyContent="center">
+        <Grid item xs={12} sm={9}>
+          <Card sx={{ minWidth: 275 }}>
+            <CardContent sx={{ p: 4, pb: 2 }} >
+              <form onSubmit={formik.handleSubmit}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={8} md={9}>
+                    <TextField
+                      fullWidth
+                      name="origUrl"
+                      disabled={formik.isSubmitting}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.origUrl}
+                      error={
+                        formik.touched.origUrl && Boolean(formik.errors.origUrl)
+                      }
+                      helperText={
+                        formik.touched.origUrl && formik.errors.origUrl
+                      }
+                      placeholder="Enter your long Url here"
+                      variant="outlined"
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={4} md={3}>
+                    <LoadingButton
+                      color="primary"
+                      fullWidth
+                      {...submitBtnProps}
+                    >
+                      {formik.isSubmitting ? 'Processing...' : 'SHORTEN'}
+                    </LoadingButton>
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} sm={4} md={3}>
-                  <LoadingButton color="primary" fullWidth {...submitBtnProps}>
-                    {formik.isSubmitting ? 'Processing...' : 'SHORTEN'}
-                  </LoadingButton>
-                </Grid>
-              </Grid>
-            </form>
-            <Typography mt={2} variant="body1" color="text.secondary">
-              By using our service, you accept our{' '}
-              <Link href="/terms-and-conditions">Terms</Link> &amp;{' '}
-              <Link href="/privacy-policy">Privacy</Link>
-            </Typography>
-          </CardContent>
-          {shortUrl && origUrl && <ShortenerResult shortUrl={shortUrl} />}
-        </Card>
+              </form>
+              <Typography mt={2} variant="body1" color="text.secondary">
+                By using our service, you accept our{' '}
+                <Link href="/terms-and-conditions">Terms</Link> &amp;{' '}
+                <Link href="/privacy-policy">Privacy</Link>
+              </Typography>
+            </CardContent>
+            {shortUrl && origUrl && <ShortenerResult shortUrl={shortUrl} />}
+          </Card>
+        </Grid>
       </Grid>
-    </Grid>
   );
 }

@@ -29,14 +29,16 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 export default function RefflyLogo() {
   return (
-    <Grid item xs={12}>
+    <Grid item xs={12} className="Logo">
       <Grid container mt={5} justifyContent="center">
         <StyledBadge
           overlap="circular"
           anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
           variant="dot"
+          className="badgeCircle"
         >
           <Avatar
+            className="badgeAvatar"
             style={{ transform: 'rotate(-50deg)' }}
             sx={{
               width: 80,
@@ -47,10 +49,21 @@ export default function RefflyLogo() {
             <AddLink
               sx={{ fontSize: 70, color: 'refflyplus.secondary' }}
               color="primary"
+              className="badgeAvatarLink"
             />
           </Avatar>
         </StyledBadge>
-        <Typography component="div" fontFamily="Beth Ellen" sx={{ fontSize: 40, fontWeight: 'bold', mt: 1, color: 'refflyplus.secondary' }}>
+        <Typography
+          className="badgeText"
+          component="div"
+          fontFamily="Beth Ellen"
+          sx={{
+            fontSize: 40,
+            fontWeight: 'bold',
+            mt: 1,
+            color: 'refflyplus.secondary',
+          }}
+        >
           reffly<sup>+</sup>
         </Typography>
       </Grid>
