@@ -9,7 +9,7 @@
   "typings": "web/index.d.ts",
   "scripts": {
     "start": "run-p start:react start:server",
-    "start:react": "parcel src/index.html --out-dir temp/react --port=3011",
+    "start:react": "rm -rf parcel src/index.html --out-dir temp/react --port=3011",
     "start:server": "nodemon server/api.js",
     "build": "run-p build:static build:server build:tsdx",
     "build:tsdx": "rm -rf .cache && rm -rf dist && tsdx build",
