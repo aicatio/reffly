@@ -7,6 +7,7 @@ import SponsorshipAd from './SponsorshipAd';
 import RefflyplusAd from './RefflyplusAd';
 import TechnologyStack from './TechnologyStack';
 import AicatpromoAd from './AicatpromoAd';
+import ShortenerResult from './helpers/ShortenerResult';
 
 //importing css styles file
 // import './styles.css';
@@ -34,6 +35,7 @@ const Homepage: FC = () => {
     <Fragment>
       <Container>
         <ShortenerForm />
+        {/* <ShortenerResult/> */}
         <SponsorshipAd />
       </Container>
       <Grid className={classes.boxBackground} item xs={12}>

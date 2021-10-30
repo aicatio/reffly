@@ -40,8 +40,8 @@ const TechnologyStack = () => {
             </Grid>
             <Grid item xs={8} sm={3}>
               <StackLogo
-                imgStyle={{ marginTop: '-80px', marginBottom: '-90px' }}
-                imgUrl="/images/logos/heroku-v1.svg"
+                imgStyle={{ marginTop: '7px', marginBottom: '7px' }}
+                imgUrl="/images/logos/heroku-v2.svg"
               />
             </Grid>
           </Grid>

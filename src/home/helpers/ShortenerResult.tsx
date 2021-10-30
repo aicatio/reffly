@@ -25,21 +25,22 @@ export default function ShortenerResult({ shortUrl }: any) {
   return (
     <CardActions className={classes.boxBackground}>
       <Grid container spacing={2}>
-        <Grid mt={1} item xs={6}>
+        <Grid mt={1} lg={5} md={5} item>
           <Typography ml={1}>
             To enjoy all features, use self hosted!
           </Typography>
         </Grid>
-        <Grid item mt={1} xs={5}>
+        <Grid item mt={1} lg={5} md={6} xs={11} >
           <Input
             readOnly
             value={shortUrl}
             disableUnderline
             size="small"
             fullWidth
+            sx={{fontSize:"0.95rem"}}
           />
         </Grid>
-        <Grid item xs={1} sx={{ pr: 1, mt: 0.5 }}>
+        <Grid item lg={2} md={1} xs={1} sx={{ pr: 1, mt: 0.5 }}>
           <CopyToClipboard
             text={shortUrl}
             onCopy={() => {
