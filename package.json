@@ -8,8 +8,8 @@
   "module": "web/reffly-open.esm.js",
   "typings": "web/index.d.ts",
   "scripts": {
-    "start": "rm -rf run-p start:react start:server",
-    "start:react": "parcel src/index.html --out-dir temp/react --port=3011",
+    "start": "run-p start:react start:server",
+    "start:react": "rm -rf .cache && parcel src/index.html --out-dir temp/react --port=3011",
     "start:server": "nodemon server/api.js",
     "build": "run-p build:static build:server build:tsdx",
     "build:tsdx": "rm -rf .cache && rm -rf dist && tsdx build",
