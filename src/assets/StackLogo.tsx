@@ -3,18 +3,19 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import { makeStyles } from '@mui/styles';
 
-const StackLogo = ({ imgStyle = {}, imgUrl }: any) => {
-  const useStyles = makeStyles({
-    imgFluid: {
-      maxWidth: '100%',
-      height: 'auto',
-      filter: 'grayscale(90%)',
-    },
-    imgRounded: {
-      borderRadius: '6px !important',
-    },
-  });
 
+const useStyles = makeStyles({
+  imgFluid: {
+    maxWidth: '100%',
+    height: 'auto',
+    filter: 'grayscale(90%)',
+  },
+  imgRounded: {
+    borderRadius: '6px !important',
+  },
+});
+
+const StackLogo = ({ imgStyle = {}, imgUrl }: any) => {
   const classes = useStyles();
 
   return (

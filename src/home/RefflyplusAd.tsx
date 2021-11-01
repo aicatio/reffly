@@ -27,11 +27,11 @@ const RefflyplusAd = () => {
         <Grid
           mt={10}
           container
-          justifyContent="right"
+          justifyContent="left"
         >
           <Typography
             fontWeight="normal"
-            align="center"
+            align="left"
             variant="h4"
           >
             Self host{' '}

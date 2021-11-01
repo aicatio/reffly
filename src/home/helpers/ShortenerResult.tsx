@@ -17,9 +17,6 @@ const useStyles = makeStyles((theme: any) => ({
 
 export default function ShortenerResult({ shortUrl }: any) {
   const [copied, setCopied] = useState(false);
-
-
-
   const classes = useStyles();
 
   return (
@@ -37,7 +34,7 @@ export default function ShortenerResult({ shortUrl }: any) {
             disableUnderline
             size="small"
             fullWidth
-            sx={{fontSize:"0.95rem"}}
+            inputProps={{ style: { fontSize: "0.95rem", textAlign: "right" } }}
           />
         </Grid>
         <Grid item lg={2} md={1} xs={1} sx={{ pr: 1, mt: 0.5 }}>

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
-const logoPlus = require('../static/images/logos/Plus_Full_Logo.svg');
+const logoPlus = require('../static/images/logos/refflyplus-logo-v1.svg');
 
 export default function RefflyLogo() {
   return (
     <Grid item xs={12} className="Logo">
-      <Grid container mt={5} justifyContent="center">
+      <Grid container mt={5} justifyContent="left">
         <img
           src={logoPlus}
           alt="Reffly Plus Logo"
