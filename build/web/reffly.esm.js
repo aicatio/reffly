@@ -38,8 +38,6 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import Cookies from 'js-cookie';
 
-var logo = /*#__PURE__*/require('../static/images/logos/reffly-logo-v1.svg');
-
 function RefflyLogo() {
   return createElement(Grid, {
     item: true,
@@ -49,7 +47,7 @@ function RefflyLogo() {
     mt: 5,
     justifyContent: "center"
   }, createElement("img", {
-    src: logo,
+    src: "/images/logos/reffly-logo-v1.svg",
     alt: "Reffly Logo",
     style: {
       width: '20%',
@@ -594,8 +592,6 @@ var SponsorshipAd = function SponsorshipAd() {
   })));
 };
 
-var logoPlus = /*#__PURE__*/require('../static/images/logos/refflyplus-logo-v1.svg');
-
 function RefflyLogo$1() {
   return createElement(Grid, {
     item: true,
@@ -606,7 +602,7 @@ function RefflyLogo$1() {
     mt: 5,
     justifyContent: "left"
   }, createElement("img", {
-    src: logoPlus,
+    src: "/images/logos/refflyplus-logo-v1.svg",
     alt: "Reffly Plus Logo",
     style: {
       width: '20%',
