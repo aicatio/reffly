@@ -7,7 +7,7 @@
     "build": "ncc build index.js --license licenses.txt  -o build"
   },
   "dependencies": {
-    "@actions/core": "^1.6.0",
+    "@actions/core": "^1.9.1",
     "@actions/github": "^5.0.0",
     "@vercel/ncc": "^0.31.1",
     "git-commands": "^0.1.0",
